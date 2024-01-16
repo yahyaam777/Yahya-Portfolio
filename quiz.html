@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/stylequiz.css">
+  <title>Web Development Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div id="quiz-container">
+  <h1>Web Development Quiz</h1>
+  <div id="question"></div>
+  <div id="options"></div>
+  <button onclick="checkAnswer()">Submit Answer</button>
+  <p id="result"></p>
+</div>
+
+<script>
+  const quizData = [
+    {
+      question: "What does HTML stand for?",
+      options: ["Hyper Text Markup Language", "High Tech Machine Learning", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
+      correctAnswer: "Hyper Text Markup Language"
+    },
+    {
+      question: "Which CSS property is used to change the text color of an element?",
+      options: ["color", "text-color", "font-color", "foreground-color"],
+      correctAnswer: "color"
+    },
+    {
+      question: "What is the purpose of JavaScript?",
+      options: ["Styling web pages", "Creating interactive websites", "Defining document structure", "Database management"],
+      correctAnswer: "Creating interactive websites"
+    },
+    {
+      question: "What tag is used to embed an external JavaScript file?",
+      options: ["script", "js", "javascript", "code"],
+      correctAnswer: "script"
+    },
+    {
+      question: "In CSS, what property is used to control the space between elements' border and content?",
+      options: ["padding", "margin", "border-spacing", "spacing"],
+      correctAnswer: "padding"
+    },
+    {
+      question: "Which HTML element is used to define the structure of an HTML document?",
+      options: ["head", "structure", "article", "body"],
+      correctAnswer: "body"
+    },
+    // Add more questions as needed
+  ];
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    const currentQuestion = quizData[currentQuestionIndex];
+    document.getElementById("question").innerHTML = currentQuestion.question;
+
+    const optionsContainer = document.getElementById("options");
+    optionsContainer.innerHTML = "";
+
+    currentQuestion.options.forEach((option, index) => {
+      const button = document.createElement("button");
+      button.innerHTML = option;
+      button.onclick = function () {
+        selectOption(index);
+      };
+      optionsContainer.appendChild(button);
+    });
+  }
+
+  function selectOption(selectedIndex) {
+    const selectedOption = quizData[currentQuestionIndex].options[selectedIndex];
+    const correctAnswer = quizData[currentQuestionIndex].correctAnswer;
+
+    if (selectedOption === correctAnswer) {
+      score++;
+    }
+
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < quizData.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const resultContainer = document.getElementById("result");
+    resultContainer.innerHTML = `Your Score: ${score} out of ${quizData.length}`;
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("question").innerHTML = "";
+    document.querySelector("button").style.display = "none";
+  }
+
+  function checkAnswer() {
+    const selectedOption = document.querySelector("button:focus");
+    if (selectedOption) {
+      const selectedIndex = Array.from(selectedOption.parentNode.children).indexOf(selectedOption);
+      selectOption(selectedIndex);
+    }
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
